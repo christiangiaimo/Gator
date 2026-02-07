@@ -2,7 +2,7 @@ import type { CommandHandler } from "./commandHandler";
 
 export type CommandRegistry = Record<string, CommandHandler>;
 
-export function registerCommand(
+export async function registerCommand(
   registry: CommandRegistry,
   cmdName: string,
   handler: CommandHandler,
@@ -10,7 +10,7 @@ export function registerCommand(
   registry[cmdName] = handler;
 }
 
-export function runCommand(
+export async function runCommand(
   registry: CommandRegistry,
   cmdName: string,
   ...args: string[]

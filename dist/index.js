@@ -1,5 +1,5 @@
 import { setUser, readConfig } from "./config";
-function main() {
+async function main() {
     setUser("Christian");
     const content = readConfig();
     console.log(content);
