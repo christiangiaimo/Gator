@@ -6,5 +6,5 @@ export async function runCommand(registry, cmdName, ...args) {
     if (!handler) {
         throw new Error(`Command not found ${cmdName}`);
     }
-    handler(cmdName, ...args);
+    await handler(cmdName, ...args);
 }

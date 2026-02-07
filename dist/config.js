@@ -9,7 +9,7 @@ export function setUser(name) {
     };
     writeConfig(new_config);
 }
-function getConfigFilePath() {
+export function getConfigFilePath() {
     const userHomeDir = os.homedir();
     const fileName = "/.gatorconfig.json";
     return path.join(process.cwd(), ".gatorconfig.json");

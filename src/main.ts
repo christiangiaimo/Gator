@@ -2,10 +2,13 @@ import { handlerLogin, registerHandler } from "./commandHandler";
 import { CommandRegistry } from "./commandRegistry";
 import { registerCommand } from "./commandRegistry";
 import { runCommand } from "./commandRegistry";
-import { setUser, readConfig, writeConfig } from "./config";
+import { setUser, readConfig, writeConfig, getConfigFilePath } from "./config";
 import { argv, exitCode } from "node:process";
+import { log } from "./lib/db";
 
 async function main() {
+  console.log(getConfigFilePath());
+  console.log(readConfig());
   const cmdObject: CommandRegistry = {};
   registerCommand(cmdObject, "login", handlerLogin);
   registerCommand(cmdObject, "register", registerHandler);
@@ -20,7 +23,6 @@ async function main() {
     await runCommand(cmdObject, cmdName, ...cmdArgs);
     process.exit(0);
   } catch (err) {
-    console.error("DEBUG ERROR in run command:", err);
     throw err;
   }
 }

@@ -20,16 +20,12 @@ export async function handlerLogin(cmdName: string, ...args: string[]) {
 }
 
 export async function registerHandler(cmdName: string, ...args: string[]) {
-  console.log("DEBUG: registerHandler called with", cmdName, args);
-
   if (args.length !== 1) {
     throw new Error(`usage: ${cmdName} <name>`);
   }
 
   const name = args[0];
-  console.log("DEBUG: about to call getUser with", name);
   const user = await getUser(name);
-  console.log("DEBUG: after getUser, user =", user);
 
   if (user) {
     throw new Error("User already exists.");
@@ -38,5 +34,7 @@ export async function registerHandler(cmdName: string, ...args: string[]) {
   const newUser = await createUser(name);
   setUser(newUser.name);
   console.log(`${name} was created`);
-  console.log("DEBUG: newUser =", newUser);
+  console.log(
+    `${newUser.createdAt}, ${newUser.id}, ${newUser.name}, ${newUser.updatedAt}`,
+  );
 }

@@ -8,14 +8,11 @@ export async function createUser(name: string) {
 }
 
 export async function getUser(name: string) {
-  console.log("DEBUG: getUser called with", name);
   try {
     const [result] = await db.select().from(users).where(eq(users.name, name));
 
-    console.log("DEBUG: getUser result =", result);
     return result;
   } catch (err) {
-    console.error("DEBUG ERROR in getUser:", err);
     throw err;
   }
 }
