@@ -1,4 +1,4 @@
-import { handlerLogin, registerHandler } from "./commandHandler";
+import { handlerLogin, printUsers, registerHandler, resetUsersTable, } from "./commandHandler";
 import { registerCommand } from "./commandRegistry";
 import { runCommand } from "./commandRegistry";
 import { readConfig, getConfigFilePath } from "./config";
@@ -9,6 +9,8 @@ async function main() {
     const cmdObject = {};
     registerCommand(cmdObject, "login", handlerLogin);
     registerCommand(cmdObject, "register", registerHandler);
+    registerCommand(cmdObject, "reset", resetUsersTable);
+    registerCommand(cmdObject, "users", printUsers);
     const args = argv.slice(2);
     const cmdName = args[0];
     const cmdArgs = args.slice(1);
@@ -21,7 +23,6 @@ async function main() {
         process.exit(0);
     }
     catch (err) {
-        console.error("DEBUG ERROR in run command:", err);
         throw err;
     }
 }

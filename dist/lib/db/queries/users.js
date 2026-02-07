@@ -6,14 +6,18 @@ export async function createUser(name) {
     return result;
 }
 export async function getUser(name) {
-    console.log("DEBUG: getUser called with", name);
     try {
         const [result] = await db.select().from(users).where(eq(users.name, name));
-        console.log("DEBUG: getUser result =", result);
         return result;
     }
     catch (err) {
-        console.error("DEBUG ERROR in getUser:", err);
         throw err;
     }
+}
+export async function resetUsers() {
+    await db.delete(users).execute();
+}
+export async function getUsers() {
+    const result = await db.select().from(users);
+    return result;
 }
