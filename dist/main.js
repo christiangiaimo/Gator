@@ -1,16 +1,20 @@
-import { handlerLogin, printUsers, registerHandler, resetUsersTable, } from "./commandHandler";
+import { addFeed, agg, feeds, follow, following, handlerLogin, printUsers, registerHandler, resetUsersTable, } from "./commandHandler";
 import { registerCommand } from "./commandRegistry";
 import { runCommand } from "./commandRegistry";
-import { readConfig, getConfigFilePath } from "./config";
 import { argv } from "node:process";
 async function main() {
-    console.log(getConfigFilePath());
-    console.log(readConfig());
+    //console.log(getConfigFilePath());
+    //console.log(readConfig());
     const cmdObject = {};
     registerCommand(cmdObject, "login", handlerLogin);
     registerCommand(cmdObject, "register", registerHandler);
     registerCommand(cmdObject, "reset", resetUsersTable);
     registerCommand(cmdObject, "users", printUsers);
+    registerCommand(cmdObject, "agg", agg);
+    registerCommand(cmdObject, "addfeed", addFeed);
+    registerCommand(cmdObject, "feeds", feeds);
+    registerCommand(cmdObject, "follow", follow);
+    registerCommand(cmdObject, "following", following);
     const args = argv.slice(2);
     const cmdName = args[0];
     const cmdArgs = args.slice(1);

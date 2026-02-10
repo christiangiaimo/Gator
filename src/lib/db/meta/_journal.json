@@ -8,6 +8,20 @@
       "when": 1770350178369,
       "tag": "0000_parallel_kitty_pryde",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1770681774441,
+      "tag": "0001_odd_nehzno",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1770763477088,
+      "tag": "0002_hot_iron_fist",
+      "breakpoints": true
     }
   ]
 }
