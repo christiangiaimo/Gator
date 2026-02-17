@@ -1,0 +1,3 @@
+import { type User } from "/l";
+
+export async function unfollow(url: string, user: User) {}

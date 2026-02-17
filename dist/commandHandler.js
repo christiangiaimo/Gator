@@ -3,6 +3,7 @@ import { fetchFeed } from "./fetch";
 import { createFeed, getFeeds, getFeedsByName, getFeedsByUrl, } from "./lib/db/queries/feeds";
 import { createUser, getUser, getUsers, resetUsers, } from "./lib/db/queries/users";
 import { createFeedFollow } from "./followFeeds";
+import { Unfollow } from "./unfollow";
 export async function handlerLogin(cmdName, ...args) {
     if (args.length !== 1) {
         throw new Error(`usage: ${cmdName} <name>`);
@@ -50,17 +51,12 @@ export async function agg(cmdName, ...args) {
     const feed = await fetchFeed("https://www.wagslane.dev/index.xml");
     console.log(feed.channel);
 }
-export async function addFeed(cmdName, ...args) {
+export async function addFeed(cmdName, user, ...args) {
     if (args.length !== 2) {
         throw new Error(`usage: ${cmdName} <feed_name> <url>`);
     }
     const name = args[0];
     const url = args[1];
-    const config = readConfig();
-    if (!config.currentUserName) {
-        throw new Error("No current user");
-    }
-    const user = await getUser(config.currentUserName);
     const userId = user.id;
     const feed = await createFeed(name, url, userId);
     console.log(`succesfully created feed`);
@@ -79,12 +75,7 @@ export function printFeed(feed, user) {
     console.log(`* URL:           ${feed.url}`);
     console.log(`* User:          ${user.name}`);
 }
-export async function feeds(cmdName, ...args) {
-    const config = readConfig();
-    if (!config.currentUserName) {
-        throw new Error("No current user");
-    }
-    const user = await getUser(config.currentUserName);
+export async function feeds(cmdName, user, ...args) {
     const feeds = await getFeeds();
     for (const feed of feeds) {
         console.log(`feedname: ${feed.feedName}`);
@@ -92,15 +83,9 @@ export async function feeds(cmdName, ...args) {
         console.log(`feedname: ${feed.userName}`);
     }
 }
-export async function follow(cmdName, ...args) {
+export async function follow(cmdName, user, ...args) {
     const url = args[0];
-    const config = readConfig();
-    if (!config.currentUserName) {
-        throw new Error("No current user");
-    }
-    const user = await getUser(config.currentUserName);
     const userId = user.id;
-    const name = user.name;
     const feed = await getFeedsByUrl(url);
     const feedFollow = {
         user_id: userId,
@@ -110,14 +95,14 @@ export async function follow(cmdName, ...args) {
     console.log(`feedName: ${result.feeds}`);
     console.log(`userName: ${result.users}`);
 }
-export async function following(cmdName, ...args) {
-    const config = readConfig();
-    const user = config.currentUserName;
-    if (!user) {
-        throw new Error("No current user");
-    }
-    const feeds = await getFeedsByName(user);
+export async function following(cmdName, user, ...args) {
+    const feeds = await getFeedsByName(user.name);
     for (const feed of feeds) {
         console.log(`${feed.feedName}`);
     }
+}
+export async function unfollow(cmdName, user, ...args) {
+    const url = args[0];
+    await Unfollow(url, user);
+    console.log(`Successfully deleted the feed`);
 }
