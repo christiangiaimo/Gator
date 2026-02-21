@@ -1,6 +1,7 @@
 import {
   addFeed,
   agg,
+  browse,
   feeds,
   follow,
   following,
@@ -33,6 +34,7 @@ async function main() {
   registerCommand(cmdObject, "follow", middlewareLoggedIn(follow));
   registerCommand(cmdObject, "following", middlewareLoggedIn(following));
   registerCommand(cmdObject, "unfollow", middlewareLoggedIn(unfollow));
+  registerCommand(cmdObject, "browse", browse);
 
   const args = argv.slice(2);
   const cmdName = args[0];

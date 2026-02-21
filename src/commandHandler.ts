@@ -1,5 +1,4 @@
 import { readConfig, setUser } from "./config";
-import { fetchFeed } from "./fetch";
 import {
   createFeed,
   getFeeds,
@@ -14,15 +13,12 @@ import {
   User,
 } from "./lib/db/queries/users";
 
-import {
-  feedFollow,
-  feedFollows,
-  type SelectFeed,
-  type SelectUser,
-} from "./lib/db/schema";
-import { getFollowFeeds } from "./lib/db/queries/follows";
+import { type SelectFeed, type SelectUser } from "./lib/db/schema";
 import { createFeedFollow } from "./followFeeds";
 import { Unfollow } from "./unfollow";
+import { getNextFeedToFetch } from "./lib/db/queries/getNextFeedToFetch";
+import { scrapeFeeds } from "./scrapeFeeds";
+import { getPostsForUser } from "./lib/db/queries/getPostsForUser";
 
 export type CommandHandler = (
   cmdName: string,
@@ -80,9 +76,63 @@ export async function printUsers() {
   }
 }
 
-export async function agg(cmdName: string, ...args: string[]) {
-  const feed = await fetchFeed("https://www.wagslane.dev/index.xml");
-  console.log(feed.channel);
+function parserDuration(duration: string): string {
+  const regex = /^(\d+)(ms|s|m|h)$/;
+  const match = duration.match(regex);
+  const string = "";
+  if (!match) {
+    throw new Error("not a valid duration");
+  }
+  for (const w of match) {
+    string.concat(w);
+  }
+  return string;
+}
+
+function getDuration(durationStr: string) {
+  if (!durationStr) {
+    throw new Error("Invalid duaration");
+  }
+  const regex = /^(\d+)(ms|s|m|h)$/;
+  const match = durationStr.trim().match(regex);
+  if (!match) {
+    throw new Error("Invalid duartion");
+  }
+
+  const value: number = Number(match[1]);
+  const unit = match[2];
+  switch (unit) {
+    case "ms":
+      return value;
+    case "s":
+      return value * 1000;
+    case "m":
+      return value * 60 * 1000;
+    case "h":
+      return value * 60 * 60 * 1000;
+  }
+}
+
+function handleError(err: unknown) {
+  console.error("An error occurred during aggregation:", err);
+}
+
+export async function agg(cmdName: string, durationStr: string) {
+  //const timeStr = parserDuration(durationStr);
+  const time = getDuration(durationStr);
+  console.log(`Collecting feeds every ${durationStr}`);
+  const runScraper = () => scrapeFeeds().catch(handleError);
+
+  runScraper(); // Ejecución inmediata
+  const interval = setInterval(runScraper, time); // Ejecuciones repetidas
+
+  await new Promise<void>((resolve) => {
+    process.on("SIGINT", () => {
+      console.log("Shutting down feed aggregator...");
+      clearInterval(interval);
+      resolve();
+    });
+  });
 }
 
 export async function addFeed(cmdName: string, user: User, ...args: string[]) {
@@ -152,4 +202,14 @@ export async function unfollow(cmdName: string, user: User, ...args: string[]) {
   const url = args[0];
   await Unfollow(url, user);
   console.log(`Successfully deleted the feed`);
+}
+
+export async function browse(cmdName: string, user: string, ...args: string[]) {
+  let limit = args[0] ? parseInt(args[0], 10) : 2;
+  const posts = await getPostsForUser(user, limit);
+  for (const post of posts) {
+    console.log(`${post.posts.publishedAt ?? ""} ${post.posts.title}`);
+    console.log(`${post.posts.url}`);
+    console.log("______________");
+  }
 }

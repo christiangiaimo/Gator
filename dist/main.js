@@ -1,4 +1,4 @@
-import { addFeed, agg, feeds, follow, following, handlerLogin, printUsers, registerHandler, resetUsersTable, unfollow, } from "./commandHandler";
+import { addFeed, agg, browse, feeds, follow, following, handlerLogin, printUsers, registerHandler, resetUsersTable, unfollow, } from "./commandHandler";
 import { registerCommand } from "./commandRegistry";
 import { runCommand } from "./commandRegistry";
 import { argv } from "node:process";
@@ -17,6 +17,7 @@ async function main() {
     registerCommand(cmdObject, "follow", middlewareLoggedIn(follow));
     registerCommand(cmdObject, "following", middlewareLoggedIn(following));
     registerCommand(cmdObject, "unfollow", middlewareLoggedIn(unfollow));
+    registerCommand(cmdObject, "browse", browse);
     const args = argv.slice(2);
     const cmdName = args[0];
     const cmdArgs = args.slice(1);

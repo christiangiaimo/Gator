@@ -20,6 +20,7 @@ export const feeds = pgTable("feeds", {
     user_id: uuid("user_id")
         .notNull()
         .references(() => users.id, { onDelete: "cascade" }),
+    lastFetchedAt: timestamp("last_fetched_at"),
 });
 export const feedFollows = pgTable("feed_follows", {
     id: uuid("id").primaryKey().defaultRandom().notNull(),
@@ -36,4 +37,19 @@ export const feedFollows = pgTable("feed_follows", {
         .references(() => feeds.id, { onDelete: "cascade" }),
 }, (table) => {
     return { pk: unique().on(table.user_id, table.feed_id) };
+});
+export const posts = pgTable("posts", {
+    id: uuid("id").primaryKey().defaultRandom().notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at")
+        .notNull()
+        .defaultNow()
+        .$onUpdate(() => new Date()),
+    title: text("title").notNull(),
+    url: text("url").notNull().unique(),
+    description: text("description"),
+    publishedAt: timestamp("published_at").notNull().defaultNow(),
+    feed_id: uuid("feed_id")
+        .notNull()
+        .references(() => feeds.id, { onDelete: "cascade" }),
 });

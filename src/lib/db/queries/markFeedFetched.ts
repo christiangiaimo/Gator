@@ -1,5 +1,5 @@
 import { db } from "../index";
-import { feedFollows, feeds, users } from "../schema";
+import { feeds } from "../schema";
 import { eq } from "drizzle-orm";
 
 export async function markFeedFetched(feedId: string) {
@@ -11,5 +11,3 @@ export async function markFeedFetched(feedId: string) {
 
   return result;
 }
-
-export async function getNextFeedToFetch();
