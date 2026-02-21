@@ -18,38 +18,52 @@ The Gator app is a CLI tool that allows users to:
 For the Database you need to use the .gatorconfig.json file to put the database url.
 In the package.json you will see the scripts for running npm you use mainly:
 
-#### start ...commands: you use this to start a specific command with their inputs.
+#### start ...commands:
+you use this to start a specific command with their inputs.
 
-#### migrate: migrate the database structure.
+#### migrate: 
+migrate the database structure.
 
-#### generate: generate the database tables.
+#### generate: 
+generate the database tables.
 
-#### build: compile the code.
+#### build:
+compile the code.
 
 ### commands
 
 This CLI tool uses a set of commands like login, register, users, all of this are in the commands folder.
 This commands are:
 
-#### handlerLogin: it Logs the current user.
+#### handlerLogin: 
+it Logs the current user.
 
-#### registerHandler: registers a new user.
+#### registerHandler: 
+registers a new user.
 
-#### resetUsersTable: Resets all the users info.
+#### resetUsersTable: 
+Resets all the users info.
 
-#### printUsers: Print all the users in the database and wich user is currently logged in.
+#### printUsers: 
+Print all the users in the database and wich user is currently logged in.
 
-#### agg: It needs a time in millisecond, seconds, minutes, or hours, this is a loop that fetches feeds and adds them to the database.
+#### agg: 
+It needs a time for the loop to run in millisecond, seconds, minutes, or hours, this is a loop that fetches feeds and adds them to the database.
 
-#### addfeed: Adds a new feed to the current user logged in.
+#### addfeed: 
+Adds a new feed to the current user logged in.
 
-#### feeds: prints all the current feeds in the database for the curren user.
+#### feeds: 
+prints all the current feeds in the database for the curren user.
 
-#### follow: Make the current user follow a specific feed.
+#### follow: 
+Make the current user follow a specific feed.
 
-#### following: Prints the url of the currently following feeds.
+#### following:
+Prints the url of the currently following feeds.
 
-#### unfollow: Makes the current user unfollow a specific feed.
+#### unfollow:
+Makes the current user unfollow a specific feed.
 
 #### browse: Searches for the latest posts of the specific user ordered form latest to older, you have to put a limit of the amount of feeds you wanna see, if you dont pass them its settled to 2.
 
